@@ -1,12 +1,11 @@
 from bs4 import BeautifulSoup
-from urllib2 import urlopen
 import urllib
 import time
 import json
 
 def make_soup(url):
-    html = urlopen(url).read()
-    return BeautifulSoup(html, 'html.parser')
+    wp = urllib.request.urlopen(url)
+    return BeautifulSoup(wp, 'html.parser')
 
 city_state = []
 city_state.append({"city": "Miami", "state": "FL"})
