@@ -1,17 +1,17 @@
 from bs4 import BeautifulSoup
+from urllib2 import urlopen
 import urllib
 import time
 import json
 
 def make_soup(url):
-    wp = urllib.request.urlopen(url)
-    return BeautifulSoup(wp, 'html.parser')
+    html = urlopen(url).read()
+    return BeautifulSoup(html, 'html.parser')
 
 city_state = []
-city_state.append({"city": "Miami", "state": "FL"})
 city_state.append({"city": "New+York", "state": "NY"})
 city_state.append({"city": "San+Francisco", "state": "CA"})
-city_state.append({"city": "Austin", "state": "TX"})
+city_state.append({"city": "Boston", "state": "MA"})
 city_state.append({"city": "Chicago", "state": "IL"})
 
 zip_codes = {}
@@ -20,6 +20,7 @@ url = "http://www.getzips.com/cgi-bin/ziplook.exe?What=2&City=%s&State=%s&Submit
 
 for cs in city_state:
     custom_url = url % (cs['city'], cs['state'])
+    print cs['city']
     html_comp = make_soup(custom_url)
     zip_comps = html_comp.findAll('td', {'width': '15%'})
     zip_codes[cs['city'].replace("+", " ")] = []
