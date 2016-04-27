@@ -453,7 +453,7 @@ d3.json("/static/Resources/cities.json", function(error, data) {
           .attr("cy", padding)
           .on("click", function(d){
             console.log(d.key)
-            window.open("http://127.0.0.1:5000/city/"+d.key)
+            window.open("http://127.0.0.1:5000/city/"+d.key, "_self")
           })
       //.on('mouseover', tip.show)
       //.on('mouseout', tip.hide)
