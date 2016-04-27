@@ -4,4 +4,8 @@ d3-zip-code-choropleth/
 alltestingstuff/
 flaskAppHomeFindr/bin/
 flaskAppHomeFindr/include/
-flaskAppHomeFindr/bin/lib/
+flaskAppHomeFindr/lib/
+flaskAppHomeFindr/pip-selfcheck.json
+flaskAppHomeFindr/.idea/
+flaskAppHomeFindr/.Python
+
