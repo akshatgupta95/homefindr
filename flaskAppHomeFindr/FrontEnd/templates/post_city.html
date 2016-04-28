@@ -312,10 +312,20 @@
       line-width: 0.5;
       line-opacity: 1;
     }
-    #chicago_scored_added_4 [ score <= 0.125419531428] {
+
+    #chicago_scored_added_4 [ score <= 1.0] {
       polygon-fill: #B10026;
     }
-    #chicago_scored_added_4 [ score <= 0.0988301997458] {
+
+    {% for i in thresholds %}
+      #chicago_scored_added_4 [ score <= {{ i }}] {
+        polygon-fill: {{ polygon_fills[loop.index0] }};
+      }
+    {% endfor %}
+
+
+
+    /*#chicago_scored_added_4 [ score <= 0.0988301997458] {
       polygon-fill: #E31A1C;
     }
     #chicago_scored_added_4 [ score <= 0.0812669034507] {
@@ -332,7 +342,7 @@
     }
     #chicago_scored_added_4 [ score <= 0.0410244713089] {
       polygon-fill: #FFFFB2;
-    }
+    }*/
   </style>
 
 
@@ -364,9 +374,10 @@
           .done(function(vis, layers) {});
   }
   else {
+
   var vizjson = "https://cmathew95.cartodb.com/api/v2/viz/" + "{{ utility_dict['viz_url'] }}" + "/viz.json";
-   cartodb.createVis('map', vizjson)
-          .done(function(vis, layers, options) {
+   cartodb.createVis('map', vizjson, options)
+          .done(function(vis, layers) {
               layers[1].setCartoCSS(simpleStyle);
           });
  }
@@ -379,23 +390,28 @@
 
 
 
+
 <aside id="sidebar">
-  <div class="logo-container">HomeFindr.</div><div class="logocopy-container">Find a place you can call home.</div><a class="compose-button">SEARCH</a>
-  <div class="separator"></div>
-  <div class="menu-segment">
-    <ul class="labels">
-      <form action="/process" method="POST">
-        <input type="hidden" name="city_name" value = {{ utility_dict['city_name'] }}>
-        <li class="title">FILTER BY <span class="icon">+</span></li>
-        <li><a href="#">Pricing</a><input type="text" name="pricing"><br></li>
-        <li><a href="#">Crime Risk</a><input type="text" name="crime"><br></li>
-        <li><a href="#">Schools</a><input type="text" name="school"><br></li>
-        <li><a href="#">Restaurants</a><input type="text" name="restaurants"><br></li>
-        <input type="submit" value="Submit">
-      </form>
-    </ul>
-  </div>
-  <div class="bottom-padding"></div>
+
+    <div class="logo-container"><a href={{ url_for('main') }}>HomeFindr.
+        </a>
+    </div>
+    <div class="logocopy-container">Find a place you can call home.</div>
+    <div class="separator"></div>
+    <div class="menu-segment">
+        <ul class="labels">
+            <form action="/process" method="POST">
+                <input type="hidden" name="city_name" value={{ utility_dict['city_name'] }}>
+                <li class="title">FILTER BY <span class="icon">+</span></li>
+                <li><a href="#">Housing Prices</a><input type="text" name="pricing"><br></li>
+                <li><a href="#">Crime Risk</a><input type="text" name="crime"><br></li>
+                <li><a href="#">School Quality</a><input type="text" name="school"><br></li>
+                <li><a href="#">Restaurant Availability</a><input type="text" name="restaurants"><br></li>
+                <input type="submit" value="Submit">
+            </form>
+        </ul>
+    </div>
+    <div class="bottom-padding"></div>
 </aside>
 <main id="main">
   <div class="overlay"></div>

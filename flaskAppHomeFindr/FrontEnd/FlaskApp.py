@@ -7,6 +7,7 @@ import pandas as pd
 app = Flask(__name__)
 
 weights = [[1], [.6, .4], [.5, .35, .15], [.4, .3, .2, .1]]
+thresholds = []
 
 global_dict = {"restaurants": {
     "san_francisco": "402a1b54-0cc8-11e6-a0df-0ecd1babdde5",
@@ -39,9 +40,7 @@ def json_to_csv(city):
     ny = ny.rename(columns={'zcta5ce10': 'zip_code'})
 
     city_dict = {"san_francisco": sf, "boston": boston, "chicago": chicago, "new_york": ny}
-    hello = merge_by_city(city, city_dict[city])
-    print (hello)
-    return hello
+    return merge_by_city(city, city_dict[city])
 
 
 def merge_by_city(city, city_df):
@@ -58,7 +57,17 @@ def merge_by_city(city, city_df):
     city_score_added = pd.merge(city_df, city_df_zipcode, how="outer", on='zip_code')
     filename_csv = city + "_scored_added.csv"
     city_score_added.to_csv(filename_csv)
-    print (city_score_added.head())
+
+    scores_city = sorted(scores_city)
+    print(scores_city)
+    sandeep = lambda lst, sz: [lst[i:i+sz] for i in range(0, len(lst), sz)]
+    global thresholds
+    if (city=="san_francisco"):
+        scores_city = scores_city[:-1]
+
+    thresholds = [list[0] for list in sandeep(scores_city, len(scores_city)/6)]
+    print (thresholds)
+
     return get_viz_url(filename_csv)
 
 
@@ -148,7 +157,8 @@ def process_form():
         viz_url = json_to_csv(city_name)
     print ("VIZ URL", viz_url)
     utility_dict = {"city_name": city_name, "long": long_lat_mapping[city_name][1], "lat": long_lat_mapping[city_name][0], "viz_url" : viz_url, "type" : dots_or_choropleths, "is_school": school_restaurants}
-    return render_template("post_city.html", utility_dict=utility_dict)
+    polygon_fills = ["#D6301D", "#E31A1C", "#FC4E2A", "#FD8D3C", "#FEB24C", "#FED976", "#FFFFB2"]
+    return render_template("post_city.html", utility_dict=utility_dict, thresholds=reversed(thresholds), polygon_fills=polygon_fills)
 
 if __name__ == "__main__":
     app.run(debug=True)
