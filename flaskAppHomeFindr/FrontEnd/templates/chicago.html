@@ -874,6 +874,7 @@ d3.json("/static/Resources/cities.json", function(error, data) {
   <div class="menu-segment">
     <ul class="labels">
       <form action="/process" method="POST">
+        <input type="hidden" name="city_name" value="chicago">
         <li class="title">FILTER BY <span class="icon">+</span></li>
         <li><a href="#">Pricing</a><input type="text" name="pricing"><br></li>
         <li><a href="#">Crime Risk</a><input type="text" name="crime"><br></li>
